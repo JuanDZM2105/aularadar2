@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
+
+
 
 class universidad(models.Model):
     
@@ -29,7 +32,7 @@ class programa_academicos(models.Model):
     id_universidad = models.ForeignKey(universidad, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.nombre, self.id_universidad.nombre
+        return self.nombre
     
 class curso(models.Model):
     
@@ -50,14 +53,14 @@ class curso_programa(models.Model):
     id_unico4 = models.IntegerField(primary_key=True)
     
     def __str__(self):
-        return self.id_curso.nombre, self.id_programa_academico.nombre
+        return self.id_curso.nombre
     
 class comentario(models.Model):
     
     id_curso = models.ForeignKey(curso,null=True, on_delete=models.CASCADE)
     id_programa_academico = models.ForeignKey(programa_academicos,null=True, on_delete=models.CASCADE)
     id_universidad = models.ForeignKey(universidad,null=True,  on_delete=models.CASCADE)
-    id_usuario = models.ForeignKey(usuario,null=True, on_delete=models.CASCADE)
+    id_usuario = models.ForeignKey(User,null=True, on_delete=models.CASCADE)
     
     descripcion = models.CharField(max_length=2000)
     id_unico3 = models.IntegerField(primary_key=True)

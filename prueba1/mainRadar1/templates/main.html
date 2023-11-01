@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    
+</head>
+<body>
+    {% extends 'base.html' %}
+      {% block content %}
+     <div class='container'>
+
+        
+     
+    <form action="">
+        <div class="mb-3">
+            <h3>seleccione una opcion</h3>
+            <select class="form-select form-select-sm" aria-label="Small select example" type="text" id="campo5" name="busqueda" required onchange="updateLabel()">
+                <option selected value="NULL"></option>
+                <option value="universidad" data-label="Buscar Universidad">universidad</option>
+                <option value="programa" data-label="Programa Académico">programa academico</option>
+                <option value="curso" data-label="Buscar Curso">curso</option>
+            </select>
+
+            <input type="text" class="form-control" name="searchUniversity"  placeholder="" id="searchInput"/>
+        </div>
+        <button type="submit" class="btn2">Search</button>
+    </form>
+
+    <script>
+        function updateLabel() {
+            var select = document.getElementById("campo5");
+             
+            var input = document.getElementById("searchInput");
+            var selectedOption = select.options[select.selectedIndex];
+            if(selectedOption.value!="NULL"){
+                input.placeholder = "buscar " + selectedOption.value;
+            }
+                
+        }
+    </script>
+
+      
+          {% for universidad in universidades %}
+          
+            <b>Nombre de la universidad: </b>
+            <a href={% url "more_info" universidad.id_unico %} class="btn btn-primary">{{ universidad.nombre }}</a>
+            
+        {% endfor %}
+        
+        <br/>
+        <br/>
+          </div>
+
+      {% endblock content %}
+
+</body>
+</html>

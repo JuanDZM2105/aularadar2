@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    {% extends 'base.html' %}
+      {% block content %}
+     
+        <b>Nombre de la universidad: </b><p>{{ universidad.nombre }}</p>
+        <b>descripcion: </b><p>{{ universidad.descripcion }}</p>
+        <b>ubicacion: </b><p>{{ universidad.ubicacion }}</p>
+        
+        <a href={% url "main" %} class="btn btn-primary">volver</a>
+          
+      </div>
+    </section>
+     
+      {% endblock content %}
+
+</body>
+</html>
