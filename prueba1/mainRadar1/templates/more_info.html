@@ -10,6 +10,17 @@
         <b>descripcion: </b><p>{{ universidad.descripcion }}</p>
         <b>ubicacion: </b><p>{{ universidad.ubicacion }}</p>
         
+        
+        <h3>Programas academicos:</h3>
+        <ul>
+        {% for programa in programas_academicos %}
+            <li>
+              <a href={% url "more_info_programa" programa.id_unico %} class="btn btn-primary">{{ programa.nombre }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+         
+        
         <a href={% url "main" %} class="btn btn-primary">volver</a>
           
       </div>

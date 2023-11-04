@@ -28,7 +28,7 @@ class programa_academicos(models.Model):
     
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=2000)
-    id_unico1 = models.IntegerField(primary_key=True)
+    id_unico  = models.IntegerField(primary_key=True)
     id_universidad = models.ForeignKey(universidad, on_delete=models.CASCADE)
     
     def __str__(self):

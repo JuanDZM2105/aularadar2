@@ -18,7 +18,6 @@
                 <option selected value="NULL"></option>
                 <option value="universidad" data-label="Buscar Universidad">universidad</option>
                 <option value="programa" data-label="Programa Académico">programa academico</option>
-                <option value="curso" data-label="Buscar Curso">curso</option>
             </select>
 
             <input type="text" class="form-control" name="searchUniversity"  placeholder="" id="searchInput"/>
@@ -39,19 +38,27 @@
         }
     </script>
 
-      
-          {% for universidad in universidades %}
-          
+{% if aux == 1 %}
+    {% for objeto in busqueda %}
+        <b>Nombre de la universidad: </b>
+        <a href={% url "more_info" objeto.id_unico %} class="btn btn-primary">{{ objeto.nombre }}</a>
+    {% endfor %}
+{% else %}
+    {% for item in busqueda %}
+        {% if item|length >= 2 %}
             <b>Nombre de la universidad: </b>
-            <a href={% url "more_info" universidad.id_unico %} class="btn btn-primary">{{ universidad.nombre }}</a>
-            
-        {% endfor %}
-        
-        <br/>
-        <br/>
-          </div>
+            <a href="#" class="btn btn-primary">{{ item.1.nombre }}</a>
+            <b>Nombre del programa: </b>
+            <a href="#" class="btn btn-primary">{{ item.0.nombre }}</a>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
-      {% endblock content %}
+<br/>
+<br/>
+  </div>
+
+{% endblock content %}
 
 </body>
 </html>
