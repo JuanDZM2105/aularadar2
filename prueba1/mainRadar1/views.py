@@ -26,16 +26,16 @@ def main(request):
    
         elif(search=="programa"):
             programas=programa_academicos.objects.filter(nombre__icontains=searchTerm)
-            programas_universidades = []
+            universidades=[]
             for programa in programas:
-                universidades=universidad.objects.filter(id_unico__icontains=programa.id_universidad)
-                if universidades:
-                    programas_universidades.append((universidades[0], programa))
-                   
-            return render(request, 'main.html',{ 'searchTerm':searchTerm, 'busqueda':programas_universidades,'aux':2 })
+                universidad1 = universidad.objects.filter(id_unico__icontains=programa.id_universidad.id_unico).first()
+                universidades.append(universidad1)
+            busqueda = zip(universidades, programas)
+            return render(request, 'main.html',{ 'searchTerm':searchTerm, 'busqueda':busqueda ,'aux':2 })
     else:  
-        return render(request, 'main.html')
-    
+        universidades=universidad.objects.all()
+        return render(request, 'main.html',{ 'searchTerm':searchTerm, 'busqueda':universidades,'aux':1})
+   
 
 def more_info(request,id_unico):
     universidad1 = universidad.objects.get(id_unico=id_unico)
@@ -44,8 +44,12 @@ def more_info(request,id_unico):
 
 def more_info_programa(request, id_unico):
     programa = programa_academicos.objects.get(id_unico=id_unico)
+    curso_programas=curso_programa.objects.filter(id_programa_academico=id_unico)
+    cursos=[]
+    for curso1 in curso_programas:
+        cursos+=curso.objects.filter(id_unico2=curso1.id_curso.id_unico2)
      
-    return render(request, 'more_info.html', {  'programa_academico': programa})
+    return render(request, 'more_info_programa.html', {  'programa': programa , 'cursos' :cursos})
 
 def register(request):  
     data = {'form':CustomUserCreationForm()}

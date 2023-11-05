@@ -44,13 +44,12 @@
         <a href={% url "more_info" objeto.id_unico %} class="btn btn-primary">{{ objeto.nombre }}</a>
     {% endfor %}
 {% else %}
-    {% for item in busqueda %}
-        {% if item|length >= 2 %}
-            <b>Nombre de la universidad: </b>
-            <a href="#" class="btn btn-primary">{{ item.1.nombre }}</a>
-            <b>Nombre del programa: </b>
-            <a href="#" class="btn btn-primary">{{ item.0.nombre }}</a>
-        {% endif %}
+    {% for universidad, programa in busqueda %}
+        <!-- Aquí puedes acceder a los atributos de universidad y programa -->
+        <b>Universidad: </b>
+        <a href={% url "more_info" universidad.id_unico %} class="btn btn-primary">{{ universidad.nombre }}</a>
+        <b>Programa: </b>
+        <a href={% url "more_info_programa" programa.id_unico %} class="btn btn-primary">{{ programa.nombre }}</a>
     {% endfor %}
 {% endif %}
 

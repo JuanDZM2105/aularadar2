@@ -13,11 +13,14 @@
         
         <h3>cursos:</h3>
         <ul>
-        
+          {% for curso in cursos %}
+          <li>
+            <b>{{ curso.nombre }}</b>
+          </li>
+      {% endfor %}
         </ul>
          
-        
-        <a href={% url "main" %} class="btn btn-primary">volver</a>
+        <a href="javascript:history.back()" class="btn btn-primary">Volver a la página anterior</a>
           
       </div>
     </section>
