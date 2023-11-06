@@ -6,6 +6,9 @@ from django.contrib.auth import logout
 import datetime
 from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login
+from abc import ABC, abstractmethod
+
+
 
 # Create your views here.
 def home(request):
@@ -15,28 +18,44 @@ def exit(request):
     logout(request)
     return redirect('home')
 
+class Buscador(ABC):
+    @abstractmethod
+    def buscar(self, searchTerm):
+        pass
+
+class BuscadorUniversidad(Buscador):
+    def buscar(self, searchTerm):
+        universidades = universidad.objects.filter(nombre__icontains=searchTerm)
+        return universidades, 1
+
+class BuscadorPrograma(Buscador):
+    def buscar(self, searchTerm):
+        programas = programa_academicos.objects.filter(nombre__icontains=searchTerm)
+        universidades = []
+        for programa in programas:
+            universidad1 = universidad.objects.filter(id_unico__icontains=programa.id_universidad.id_unico).first()
+            universidades.append(universidad1)
+        return zip(universidades, programas), 2
+
 @login_required
 def main(request):
-    searchTerm=request.GET.get('searchUniversity')
-    search=request.GET.get('busqueda')
+    searchTerm = request.GET.get('searchUniversity')
+    search = request.GET.get('busqueda')
+    buscador = None
     if searchTerm:
-        if(search=="universidad"):
-            universidades=universidad.objects.filter(nombre__icontains=searchTerm)
-            return render(request, 'main.html',{ 'searchTerm':searchTerm, 'busqueda':universidades,'aux':1})
-   
-        elif(search=="programa"):
-            programas=programa_academicos.objects.filter(nombre__icontains=searchTerm)
-            universidades=[]
-            for programa in programas:
-                universidad1 = universidad.objects.filter(id_unico__icontains=programa.id_universidad.id_unico).first()
-                universidades.append(universidad1)
-            busqueda = zip(universidades, programas)
-            return render(request, 'main.html',{ 'searchTerm':searchTerm, 'busqueda':busqueda ,'aux':2 })
+        if search == "universidad":
+            buscador = BuscadorUniversidad()
+        elif search == "programa":
+            buscador = BuscadorPrograma()
+        if buscador:
+            busqueda, aux = buscador.buscar(searchTerm)
+            return render(request, 'main.html', { 'searchTerm':searchTerm, 'busqueda':busqueda ,'aux':aux })
     else:  
-        universidades=universidad.objects.all()
-        return render(request, 'main.html',{ 'searchTerm':searchTerm, 'busqueda':universidades,'aux':1})
-   
+        universidades = universidad.objects.all()
+        return render(request, 'main.html', { 'searchTerm':searchTerm, 'busqueda':universidades,'aux':1 })
+    
 
+    
 def more_info(request,id_unico):
     universidad1 = universidad.objects.get(id_unico=id_unico)
     programas_academicos = programa_academicos.objects.filter(id_universidad=universidad1.id_unico)
